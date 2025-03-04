@@ -1,0 +1,58 @@
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=admin
+      - log_destination=stderr
+      - logging_collector=on
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/:/var/lib/postgresql/data
+    networks:
+      - postgres_back_network
+
+  back_app:
+    container_name: back_app
+    build: 
+      context: ./BACK/
+      dockerfile: Dockerfile
+    volumes:
+      #- ./DB:/home/DB
+      - ./IMG:/home/IMG
+      - ./BACK:/home/app
+    stop_signal: SIGTERM
+    ports:
+      - "8000:8000"
+    networks:
+      - front_back_network
+      - postgres_back_network
+
+
+  front_app:
+    container_name: front_app    
+    build: 
+      context: ./FRONT/
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./IMG:/usr/share/nginx/html/IMG
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - back_app
+    networks:
+      - front_back_network
+
+networks:
+  front_back_network:
+    driver: bridge
+  postgres_back_network:
+    driver: bridge
+
+
+

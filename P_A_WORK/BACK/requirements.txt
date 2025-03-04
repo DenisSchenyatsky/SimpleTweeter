@@ -1,0 +1,11 @@
+fastapi==0.115.8
+fastapi-cli==0.0.7
+SQLAlchemy==2.0.38
+aiosqlite==0.21.0
+aiologger==0.7.0
+python-multipart==0.0.20
+aiofiles==24.1.0
+asyncpg==0.30.0
+#pytest==8.3.4
+
+#black==25.1.0
