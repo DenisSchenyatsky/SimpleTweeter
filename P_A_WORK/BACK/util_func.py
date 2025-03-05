@@ -1,4 +1,6 @@
 import aiofiles
+from fastapi.responses import JSONResponse
+
 
 
 async def save_file(in_file, out_file_path: str):
@@ -13,3 +15,15 @@ def get_err_dict(error_type: str, error_message: str):
         "error_type": error_type,
         "error_message": error_message,
     }
+
+def get_err_JSONRes(
+    status_code: int, error_type: str, error_message: str
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "result": False,
+            "error_type": error_type,
+            "error_message": error_message,
+        },
+    )
