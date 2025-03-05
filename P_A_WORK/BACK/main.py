@@ -20,7 +20,7 @@ from contextlib import asynccontextmanager
 
 from models import logger
 
-
+##
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await logger.info("---===< DB and its ORM try to init...>===---")
@@ -53,6 +53,7 @@ async def lifespan(app: FastAPI):
         await session.commit()
     except Exception:
         pass
+        
     yield
     await logger.info("---===< DB and its ORM try to tear down...>===---")
     await session.rollback()    
