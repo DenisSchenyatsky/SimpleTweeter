@@ -7,14 +7,14 @@ from sqlalchemy import and_
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.sql.expression import update
 
-import models 
+import models
 
-import schemas 
+import schemas
 from database import engine, session
 
 import random
 import os
-import util_func 
+import util_func
 
 from contextlib import asynccontextmanager
 
@@ -96,10 +96,9 @@ async def user_by_id(
         )
         user = res.scalar()
         if user is None:
-            return util_func.get_err_JSONRes(404,
-                                             "not found", 
-                                             f"User with id: {user_id} doesn't exist."
-                                             )
+            return util_func.get_err_JSONRes(
+                404, "not found", f"User with id: {user_id} doesn't exist."
+            )
 
     await user.get_up_follows()
     result = {"result": True, "user": user.as_dict()}
