@@ -58,6 +58,7 @@ async def lifespan(app: FastAPI):
         await session.commit()
     except Exception:
         pass
+
     yield
     await logger.info("---===< DB and its ORM try to tear down...>===---")
     await session.rollback()
