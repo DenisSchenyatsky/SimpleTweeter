@@ -20,7 +20,7 @@ from contextlib import asynccontextmanager
 
 from models import logger
 
-
+#
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await logger.info("---===< DB and its ORM try to init...>===---")
