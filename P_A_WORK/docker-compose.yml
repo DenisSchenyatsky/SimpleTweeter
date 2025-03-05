@@ -20,6 +20,7 @@ services:
     build: 
       context: ./BACK/
       dockerfile: Dockerfile
+    restart: always
     volumes:
       #- ./DB:/home/DB
       - ./IMG:/home/IMG
@@ -37,7 +38,7 @@ services:
     build: 
       context: ./FRONT/
       dockerfile: Dockerfile
-    restart: always
+    #restart: always
     volumes:
       - ./IMG:/usr/share/nginx/html/IMG
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf

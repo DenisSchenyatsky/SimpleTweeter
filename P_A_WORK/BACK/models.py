@@ -8,7 +8,7 @@ from typing import List, Optional
 
 from database import Base, session
 
-# /\/\/\/\/\/\/\/\/\/\/\/\
+# /\/\/\/\/\/\/\/\/\/\/\/\/\
 from aiologger.loggers.json import JsonLogger
 from aiologger.formatters.json import FUNCTION_NAME_FIELDNAME, LOGGED_AT_FIELDNAME
 
@@ -22,7 +22,7 @@ logger = JsonLogger.with_default_handlers(
         "line_number",
     ],
 )
-# \/\/\/\/\/\/\/\/\/\/\/\/
+# \/\/\/\/\/\/\/\/\/\/\/\/\/
 
 
 class User(Base):

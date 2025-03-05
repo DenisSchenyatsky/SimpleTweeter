@@ -7,14 +7,14 @@ from sqlalchemy import and_
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.sql.expression import update
 
-import models
+import models 
 
-import schemas
+import schemas 
 from database import engine, session
 
 import random
 import os
-import util_func
+import util_func 
 
 from contextlib import asynccontextmanager
 
@@ -77,7 +77,7 @@ app = FastAPI(lifespan=lifespan)
     response_model=Union[schemas.UserResultOut, schemas.ErrResultOut],
 )
 async def user_by_id(
-    user_id: Union[int, str] = 0,
+    user_id: Optional[str] = 0,
     api_key: Annotated[str | None, Header()] = None,
 ) -> Union[models.User, dict]:
     """
@@ -90,14 +90,16 @@ async def user_by_id(
         if user is None:
             return err_dict
     else:
+        user_id = int(user_id)
         res = await session.execute(
             select(models.User).where(models.User.id == user_id)
         )
         user = res.scalar()
         if user is None:
-            return util_func.get_err_dict(
-                "not found", f"User with id: {user_id} doesn't exist."
-            )
+            return util_func.get_err_JSONRes(404,
+                                             "not found", 
+                                             f"User with id: {user_id} doesn't exist."
+                                             )
 
     await user.get_up_follows()
     result = {"result": True, "user": user.as_dict()}
@@ -193,9 +195,7 @@ async def add_tweet(
 ) -> dict:
     """
     <h1>
-
     Добавить твит.
-
     </h1>
     """
     user, err_dict = await models.User.get_by_api_key(api_key)
