@@ -3,15 +3,20 @@ import pytest
 from fastapi.testclient import TestClient
 from fastapi import FastAPI
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy import select
+from sqlalchemy import select, create_engine
 from contextlib import asynccontextmanager
 
 from BACK.app import create_app
 import BACK.models as models
 
-from database_t import engine, session
+from database_t import engine, session, DATABASE_URL
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+
 
 GLOB_DICT = {}
+
+engine_test = create_async_engine(DATABASE_URL, echo=False)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -55,9 +60,11 @@ async def lifespan(app: FastAPI):
     await session.close()
     await engine.dispose()
 
+
 app = create_app(session, lifespan)
 
-#Запросы на "бэк" (8000)
+# Запросы на "бэк" (8000)
+
 
 def test_get_empty_user():
     with TestClient(app, base_url="http://127.0.0.1:8000/api") as client:
@@ -67,16 +74,18 @@ def test_get_empty_user():
         )
     assert response.status_code == 404
 
+
 def test_get_testuser():
     with TestClient(app, base_url="http://127.0.0.1:8000/api") as client:
         response = client.get(
             "users/1",
             headers={"X-Token": "coneofsilence"},
         )
-    # 
+    #
     assert response.status_code == 200
     res_data: dict = response.json()
     assert res_data.get("user").get("name") == "Test User"
+
 
 def test_get_user_me():
     with TestClient(app, base_url="http://127.0.0.1:8000/api") as client:
@@ -84,40 +93,42 @@ def test_get_user_me():
             "users/me",
             headers={"api-key": "test"},
         )
-    # 
+    #
     assert response.status_code == 200
     res_data: dict = response.json()
     assert res_data.get("user").get("name") == "Test User"
 
+
 def test_post_tweet_create():
     d_data = {"tweet_data": "ABCDEF"}
     with TestClient(app, base_url="http://127.0.0.1:8000/api") as client:
-        response = client.post(
-            "tweets",
-            headers={"api-key": "test"},
-            json=d_data
-        )
+        response = client.post("tweets", headers={"api-key": "test"}, json=d_data)
         assert response.status_code == 200
-        
+
         resp_data: dict = response.json()
         tweet_id = resp_data.get("tweet_id")
         GLOB_DICT["tweet_id"] = tweet_id
-    
-        
 
-@pytest.mark.asyncio        
+
+@pytest.mark.asyncio
 async def test_inner_check():
+    """
+    Для сверки значений в бд и в приложении.
+    """
     tweet_id = GLOB_DICT.get("tweet_id")
-    res = await session.execute(select(models.Tweet).where(models.Tweet.id==tweet_id))
-    tweet: models.Tweet = res.scalar()
-    assert tweet.content == "ABCDEF" 
-    
+    async with AsyncSession(engine_test) as session:
+        res = await session.execute(
+            select(models.Tweet).where(models.Tweet.id == tweet_id)
+        )
+        tweet: models.Tweet = res.scalar()
+    assert tweet.content == "ABCDEF"
+
+
 def test_post_tweet_delete():
     tweet_id = GLOB_DICT.get("tweet_id")
     with TestClient(app, base_url="http://127.0.0.1:8000/api") as client:
         response = client.delete(
-                f"tweets/{tweet_id}",
-                headers={"api-key": "test"},
-            )
+            f"tweets/{tweet_id}",
+            headers={"api-key": "test"},
+        )
     assert response.status_code == 200
- 

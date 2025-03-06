@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from sqlalchemy.dialects.postgresql import insert
 
-import models 
+import models
 from database import engine, session
 from app import create_app
 

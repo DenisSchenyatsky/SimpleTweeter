@@ -27,7 +27,7 @@ IMG_PATH = "./IMG"
 def create_app(session: Session, lifespan: Generator[None, Any, None]) -> FastAPI:
 
     app = FastAPI(lifespan=lifespan)
-    
+
     models.set_session(session)
 
     #   API USERS
