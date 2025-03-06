@@ -20,11 +20,11 @@ services:
     build: 
       context: ./BACK/
       dockerfile: Dockerfile
-    restart: always
+    #restart: always
     volumes:
       #- ./DB:/home/DB
       - ./IMG:/home/IMG
-      - ./BACK:/home/app
+      - ./BACK:/home/BACK
     stop_signal: SIGTERM
     ports:
       - "8000:8000"

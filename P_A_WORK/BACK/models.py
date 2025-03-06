@@ -1,12 +1,25 @@
-from sqlalchemy import String, Integer, ForeignKey, DateTime, or_
+from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 from sqlalchemy.ext.associationproxy import association_proxy, AssociationProxy
+from sqlalchemy.orm import DeclarativeBase
 
 from sqlalchemy.future import select
 
 from typing import List, Optional
 
-from database import Base, session
+from sqlalchemy.orm import Session
+
+session: Session = None
+# from database import session
+
+
+def set_session(some_session: Session):
+    """
+    Привязка моделей к сессии.<br>
+    models.session = some_session
+    """
+    global session
+    session = some_session
 
 
 # /\/\/\/\/\/\/\/\/\/\/\/\/\
@@ -24,6 +37,10 @@ logger = JsonLogger.with_default_handlers(
     ],
 )
 # \/\/\/\/\/\/\/\/\/\/\/\/\/
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 class User(Base):
