@@ -23,7 +23,7 @@ from BACK.models import logger
 IMG_PATH = "./IMG"
 
 
-# Фабрика приложений.
+# Т.н. фабрика приложения.
 def create_app(session: Session, lifespan: Generator[None, Any, None]) -> FastAPI:
 
     app = FastAPI(lifespan=lifespan)
@@ -42,7 +42,7 @@ def create_app(session: Session, lifespan: Generator[None, Any, None]) -> FastAP
     ) -> Union[models.User, dict]:
         """
         <h1>
-        Информация о пользователе по id или 'me' ключом.
+        Информация о пользователе по id или 'me' с ключом.
         </h1>
         """
         if user_id == "me":
