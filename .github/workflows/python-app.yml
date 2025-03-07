@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         # pip install flake8 pytest
         pip install 'black==25.1.0' pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if [ -f BACK/requirements.txt ]; then pip install -r BACK/requirements.txt; fi
 
     - name: Lint with black
       run: |
