@@ -1,8 +1,6 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-# DATABASE_URL = "sqlite+aiosqlite:///./DB/tw.db"
-
 DATABASE_URL = "postgresql+asyncpg://admin:admin@postgres_container:5432/admin"
 
 engine = create_async_engine(DATABASE_URL, echo=True)

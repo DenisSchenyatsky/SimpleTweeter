@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from sqlalchemy.dialects.postgresql import insert
 
-import models
-from database import engine, session
-from app import create_app
+import BACK.models as models
+from BACK.database import engine, session
+from BACK.app import create_app
 
 from contextlib import asynccontextmanager
 
-from models import logger
+from BACK.models import logger
 
 
 @asynccontextmanager
