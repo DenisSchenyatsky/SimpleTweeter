@@ -1,24 +1,19 @@
-from typing import List, Union, Annotated, Optional, Any, Generator
+import os
+import random
+from typing import Annotated, Any, Generator, List, Optional, Union
 
 from fastapi import FastAPI, Header, UploadFile
 from fastapi.responses import JSONResponse
-from sqlalchemy.future import select
 from sqlalchemy import and_
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.sql.expression import update
+from sqlalchemy.future import select
 from sqlalchemy.orm import Session
-
+from sqlalchemy.sql.expression import update
 
 import BACK.models as models
-
 import BACK.schemas as schemas
-
-import random
-import os
 import BACK.util_func as util_func
-
 from BACK.models import logger
-
 
 IMG_PATH = "./IMG"
 
