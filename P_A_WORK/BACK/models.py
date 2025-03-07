@@ -1,13 +1,10 @@
-from sqlalchemy import String, Integer, ForeignKey
-from sqlalchemy.orm import mapped_column, relationship, Mapped
-from sqlalchemy.ext.associationproxy import association_proxy, AssociationProxy
-from sqlalchemy.orm import DeclarativeBase
-
-from sqlalchemy.future import select
-
 from typing import List, Optional
 
-from sqlalchemy.orm import Session
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.ext.associationproxy import AssociationProxy, association_proxy
+from sqlalchemy.future import select
+from sqlalchemy.orm import (DeclarativeBase, Mapped, Session, mapped_column,
+                            relationship)
 
 session: Session = None
 # from database import session
@@ -22,9 +19,10 @@ def set_session(some_session: Session):
     session = some_session
 
 
+from aiologger.formatters.json import (FUNCTION_NAME_FIELDNAME,
+                                       LOGGED_AT_FIELDNAME)
 # /\/\/\/\/\/\/\/\/\/\/\/\/\
 from aiologger.loggers.json import JsonLogger
-from aiologger.formatters.json import FUNCTION_NAME_FIELDNAME, LOGGED_AT_FIELDNAME
 
 logger = JsonLogger.with_default_handlers(
     level="DEBUG",
